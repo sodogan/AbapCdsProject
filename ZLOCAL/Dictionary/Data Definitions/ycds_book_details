@@ -1,0 +1,24 @@
+@AbapCatalog.sqlViewName: 'YBOOK_DTLS'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Analytics.query: true
+@EndUserText.label: 'Book details'
+@Analytics.dataCategory: #DIMENSION
+define root view ycds_book_dtls as select from ycds_books_root
+left outer join ycds_authors_root
+    on ycds_authors_root.author_id = ycds_books_root.author_id {
+    //ycds_authors_root
+    key book_id,
+    key ycds_authors_root.author_id,
+//    ycds_authors_root.author_name,
+    ycds_books_root.title,
+    ycds_books_root.stock,
+    @Semantics.amount.currencyCode: 'curr_code'
+    ycds_books_root.cost,
+    @Semantics.currencyCode: true
+    ycds_books_root.currency_code as curr_code,
+    @Semantics.user.createdBy: true
+    ycds_books_root.created_by
+
+}

@@ -1,0 +1,23 @@
+@EndUserText.label : 'Books'
+@AbapCatalog.enhancementCategory : #EXTENSIBLE_ANY
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #ALLOWED
+define table ybooks {
+  key client      : abap.clnt not null;
+  key book_id     : int4 not null;
+  @AbapCatalog.foreignKey.screenCheck : false
+  author_id       : int4 not null
+    with foreign key [0..*,1] yauthors
+      where author_id = ybooks.author_id;
+  title           : abap.string(256);
+  stock           : abap.int4;
+  @Semantics.amount.currencyCode : 'ybooks.currency_code'
+  cost            : abap.curr(15,2);
+  currency_code   : abap.cuky;
+  created_by      : syuname;
+  created_at      : timestampl;
+  last_changed_by : syuname;
+  last_changed_at : timestampl;
+
+}

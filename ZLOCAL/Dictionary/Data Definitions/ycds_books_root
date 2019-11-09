@@ -1,0 +1,18 @@
+@AbapCatalog.sqlViewName: 'YBOOKS_ROOT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'All Book details'
+define view ycds_books_root as select from ybooks {
+    //ybooks
+    key book_id,
+    author_id,
+    title,
+    stock,
+    cost,
+    currency_code,
+    created_by,
+    created_at,
+    last_changed_by,
+    last_changed_at
+}

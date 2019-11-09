@@ -1,0 +1,17 @@
+@AbapCatalog.sqlViewName: 'YAUTHOR_PARAM'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'Paramterized CDS view'
+define view ycds_author_parameterized
+    with parameters iv_author_id : yauthor_id
+    as select from ycds_authors_root {
+    //ycds_authors_root
+    key author_id,
+//    author_name,
+    created_by,
+    created_at,
+    last_changed_by,
+    last_changed_at
+}
+where author_id = $parameters.iv_author_id

@@ -1,0 +1,46 @@
+CLASS zcl_generate_data DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC.
+
+  PUBLIC SECTION.
+  INTERFACES zif_all_types.
+  INTERFACES zif_abap_features.
+  INTERFACES IF_OO_ADT_CLASSRUN.
+  ALIASES test_table_expressions for zif_abap_features~test_table_expressions.
+  ALIASES main for if_oo_adt_classrun~main.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS ZCL_GENERATE_DATA IMPLEMENTATION.
+
+
+METHOD main.
+ out->write( 'Started loading the data into ....' ).
+ data(lo_data_loader) = new zcl_data_loader( ).
+ lo_data_loader->load_data(
+   IMPORTING
+     et_books   = data(lt_books)
+     et_authors = data(lt_authors)
+ ).
+ out->write(
+   EXPORTING
+     data   = lt_authors
+     name   = 'Loaded Authors..'
+ )->write(
+   EXPORTING
+     data   = lt_books
+     name   = 'Loaded Authors..'
+ ).
+
+
+ENDMETHOD.
+
+
+METHOD test_table_expressions.
+
+ENDMETHOD.
+ENDCLASS.

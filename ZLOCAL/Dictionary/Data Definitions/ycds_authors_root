@@ -1,0 +1,21 @@
+@AbapCatalog.sqlViewName: 'YAUTHORS_ROOT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'All authors'
+define view ycds_authors_root as select from yauthors{
+  //yauthors
+  key author_id,
+  author_name,
+//using the CDS Functions  
+  left(author_name, 5) as author_name_left,
+  right(author_name, 5) as author_name_right,
+  concat(created_by,author_name) as dtl,
+  @Semantics.user.createdBy: true
+  created_by,
+  @Semantics.systemDateTime.createdAt: true
+  created_at,
+  @Semantics.user.lastChangedBy: true
+  last_changed_by,
+  last_changed_at  
+}

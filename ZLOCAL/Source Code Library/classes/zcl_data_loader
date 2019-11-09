@@ -1,0 +1,85 @@
+CLASS zcl_data_loader DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+   types:
+        tt_standard_books TYPE STANDARD TABLE OF ybooks WITH DEFAULT KEY,
+        tt_standard_authors TYPE STANDARD TABLE OF yauthors WITH DEFAULT KEY
+   .
+
+  METHODS: load_data EXPORTING
+                     et_books TYPE tt_standard_books
+                     et_authors TYPE tt_standard_authors .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    METHODS update_the_database
+      IMPORTING
+        it_authors TYPE tt_standard_authors
+        it_books   TYPE tt_standard_books
+      EXPORTING
+        et_authors TYPE tt_standard_authors
+        et_books   TYPE tt_standard_books.
+
+ENDCLASS.
+
+
+
+CLASS ZCL_DATA_LOADER IMPLEMENTATION.
+
+
+  METHOD load_data.
+  "First create the data
+   GET TIME STAMP FIELD DATA(lv_timestamp).
+   DATA(lt_authors) = VALUE tt_standard_authors(
+           ( author_id = 42   author_name = 'Douglas Adams'     created_by = sy-uname created_at = lv_timestamp )
+           ( author_id = 101  author_name = 'Emily Brontë'      created_by = sy-uname created_at = lv_timestamp )
+           ( author_id = 107  author_name = 'Charlote Brontë'   created_by = sy-uname created_at = lv_timestamp )
+           ( author_id = 150  author_name = 'Edgar Allen Poe'   created_by = sy-uname created_at = lv_timestamp )
+           ( author_id = 170  author_name = 'Richard Carpenter' created_by = sy-uname created_at = lv_timestamp )
+           ( author_id = 99   author_name = 'No one'            created_by = sy-uname created_at = lv_timestamp )
+           ).
+
+    data(lt_books) = VALUE tt_standard_books(
+            ( book_id = 421 title = 'The Hitch Hikers Guide To The Galaxy'  author_id = 42  stock = 1000 created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 427 title = 'Life, The Universe And Everything'     author_id = 42  stock = 95   created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 201 title = 'Wuthering Heights'                     author_id = 101 stock = 12   created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 207 title = 'Jane Eyre'                             author_id = 107 stock = 11   created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 251 title = 'The Raven'                             author_id = 150 stock = 333  created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 252 title = 'Eleonora'                              author_id = 150 stock = 555  created_by = sy-uname created_at = lv_timestamp )
+            ( book_id = 271 title = 'Catweazle'                             author_id = 170 stock = 22   created_by = sy-uname created_at = lv_timestamp )
+     ).
+***Update the database tables
+        update_the_database(
+              EXPORTING
+                it_authors = lt_authors
+                it_books   = lt_books
+              IMPORTING
+                et_authors = et_authors
+                et_books   = et_books ).
+  ENDMETHOD.
+
+
+  METHOD update_the_database.
+
+    "At last update the data into the tables
+    "delete data before
+    DELETE FROM yauthors.
+    DELETE FROM ybooks.
+
+    "insert demo data
+    INSERT yauthors      FROM TABLE @it_authors.
+    INSERT ybooks        FROM TABLE @it_books.
+
+
+*   check the result
+    SELECT * FROM yauthors INTO TABLE @et_authors.
+*    out->write( sy-dbcnt ).
+*    out->write( 'Author data inserted successfully!').
+    SELECT * FROM ybooks INTO TABLE @et_books.
+*    out->write( sy-dbcnt ).
+*    out->write( 'Book data inserted successfully!').
+
+  ENDMETHOD.
+ENDCLASS.

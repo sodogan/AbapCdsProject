@@ -1,0 +1,15 @@
+@EndUserText.label : 'Authors'
+@AbapCatalog.enhancementCategory : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #ALLOWED
+define table yauthors {
+  key client      : abap.clnt not null;
+  key author_id   : int4 not null;
+  author_name     : abap.char(256);
+  created_by      : syuname;
+  created_at      : timestampl;
+  last_changed_by : syuname;
+  last_changed_at : timestampl;
+
+}
